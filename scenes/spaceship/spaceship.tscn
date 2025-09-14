@@ -12,4 +12,3 @@ mesh = SubResource("CylinderMesh_tgn4n")
 
 [node name="OrbitController" type="Node" parent="."]
 script = ExtResource("1_4vs15")
-orbital_velocity = 1.0
