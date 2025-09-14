@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci8d18qc6uhtq"]
+
+[ext_resource type="Script" uid="uid://dunrlmt147aih" path="res://common/components/orbit_controller.gd" id="1_4vs15"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tgn4n"]
+
+[node name="Spaceship" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_tgn4n")
+
+[node name="OrbitController" type="Node" parent="."]
+script = ExtResource("1_4vs15")
+orbital_velocity = 1.0
