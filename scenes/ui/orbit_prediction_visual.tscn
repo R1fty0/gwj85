@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbsd20se42yp7"]
+
+[ext_resource type="PackedScene" uid="uid://cux73abgv50f7" path="res://assets/art/orbit_prediction_mesh.glb" id="1_05yu7"]
+
+[node name="OrbitPredictionVisual" type="Node3D"]
+
+[node name="orbit_prediction_mesh" parent="." instance=ExtResource("1_05yu7")]
