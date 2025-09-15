@@ -1,33 +1,33 @@
 extends Node
-class_name OrbitController
+class_name OrbitComponent
 
-## Note: This script assuming its parent is the one is should be controlling. 
+@export var orbiter: Node3D
+@export var orbit_speed: float = 2.0
 
-@export var orbit_axis: Vector3 = Vector3.LEFT
-## How high above the planet is the object orbiting. 
-@export var orbit_radius: float = 1.0
-## How fast does the object move while orbiting. 
-@export var orbit_velocity: float = 2.0
-
-# TODO: make getting this cleaner 
-@export var planet_center: Node3D
-var orbit_angle: float = 0.0
-
+var orbit_pivot: Node3D = null
+var in_orbit: bool = false 
 
 func _physics_process(delta: float) -> void:
-	# Update orbit angle
-	orbit_angle += orbit_velocity * delta
-	var rotation = Basis().rotated(orbit_axis.normalized(), orbit_angle)
-	# TODO: fix this so that planet position doesn't have to be at (0,0,0)
-	var offset = rotation * Vector3(0,0, orbit_radius)
-	var new_pos = offset + planet_center.global_position
-	# Get the object's last position. 
-	var old_pos = get_parent().global_position
-	# Figure out the rotation needed for the object to be pointing at its new position. 
-	var direction = (new_pos - old_pos).normalized()
-	# Apply the rotation.
-	if direction.length() > 0:
-		get_parent().look_at(new_pos + direction, orbit_axis)
-	# Apply the new position. 
-	get_parent().global_position = new_pos
+	if in_orbit:
+		orbit_pivot.rotate_x(-orbit_speed * delta)
 	
+func _enter_orbit() -> void:
+	# Create a new orbit pivot. 
+	orbit_pivot = Node3D.new()
+	orbit_pivot.global_transform = Globals.planet_center.global_transform
+	Globals.planet_center.add_child(orbit_pivot)
+	# Reparent the orbiter to the orbit pivot. 
+	orbiter.reparent(orbit_pivot, true)
+	in_orbit = true
+	
+func _exit_orbit() -> void:
+	# Reparent the orbiter.
+	orbiter.reparent(SpaceshipManager, true)
+	# Remove the orbit pivot.
+	orbit_pivot.queue_free()
+	in_orbit = false 
+	
+func _input(event: InputEvent) -> void:
+	# For debug
+	if event.is_action_pressed("orbit_button"):
+		_enter_orbit()

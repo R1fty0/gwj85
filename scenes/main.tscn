@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ygegp2wnqfqe"]
 
-[ext_resource type="PackedScene" uid="uid://ci8d18qc6uhtq" path="res://scenes/spaceship/spaceship.tscn" id="2_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://dvln2olkyedrv" path="res://scenes/planet/planet.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://ci8d18qc6uhtq" path="res://scenes/instantiables/spaceship/spaceship.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://dvln2olkyedrv" path="res://scenes/environments/planet/planet.tscn" id="2_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sgp6g"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -18,7 +18,7 @@ tonemap_mode = 2
 [node name="Main" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.999945, 0.00180646, -0.0103529, 0, 0.985116, 0.171892, 0.0105093, -0.171883, 0.985061, -0.0790739, 0.578898, 2.50974)
+transform = Transform3D(0.999945, 0.00180647, -0.0103529, 0, 0.985116, 0.171892, 0.0105093, -0.171883, 0.985061, -0.0790739, 0.578898, 3.0523)
 
 [node name="Post-Processing" type="Node" parent="."]
 
@@ -29,17 +29,21 @@ environment = SubResource("Environment_0wfyh")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Spaceship" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.660438, -1.95029)
-
-[node name="OrbitController" parent="Spaceship" index="1" node_paths=PackedStringArray("planet_center")]
-orbit_velocity = 1.0
-planet_center = NodePath("../../Planet/PlanetMesh/PlanetCenter")
-
 [node name="Planet" parent="." instance=ExtResource("2_sugp2")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="PlanetMesh" parent="Planet" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
-[editable path="Spaceship"]
+[node name="PlanetCenter" parent="Planet/PlanetMesh" index="0" groups=["planet_center"]]
+
+[node name="SpaceshipManager" type="Node" parent="."]
+
+[node name="Spaceship" parent="SpaceshipManager" instance=ExtResource("2_0wfyh")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 1.6157, 0.0111291)
+
+[node name="OrbitComponent" parent="SpaceshipManager/Spaceship" index="1" node_paths=PackedStringArray("orbiter")]
+orbiter = NodePath("..")
+
 [editable path="Planet"]
+[editable path="SpaceshipManager/Spaceship"]
